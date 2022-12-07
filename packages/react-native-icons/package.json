@@ -1,6 +1,6 @@
 {
-  "name": "@fluentui/react-icons",
-  "version": "2.0.189",
+  "name": "@fluentui/react-native-icons",
+  "version": "0.0.1",
   "sideEffects": false,
   "main": "lib-cjs/index.js",
   "module": "lib/index.js",
@@ -14,7 +14,7 @@
   "scripts": {
     "clean": "find ./src -type f ! -name \"wrapIcon.tsx\" -name \"*.tsx\" -delete",
     "cleanSvg": "rm -rf ./intermediate",
-    "copy": "node ../../importer/generate.js --source=./assets --dest=./intermediate --extension=svg --target=react",
+    "copy": "node ../../importer/generate.js --source=../../test --dest=./intermediate --extension=svg --target=react",
     "copy:font-files": "cpy './src/utils/fonts/*.{ttf,woff,woff2,json}' ./lib/utils/fonts/. && cpy './src/utils/fonts/*.{ttf,woff,woff2,json}' ./lib-cjs/utils/fonts/.",
     "convert:svg": "node convert.js --source=./intermediate --dest=./src",
     "convert:fonts": "node convert-font.js --source=./src/utils/fonts --dest=./src/fonts --codepointDest=./src/utils/fonts",
@@ -33,7 +33,6 @@
     "@babel/cli": "^7.16.0",
     "@babel/core": "^7.16.0",
     "@babel/preset-typescript": "^7.16.7",
-    "@griffel/babel-preset": "^1.0.0",
     "@svgr/core": "^5.5.0",
     "@types/react": "^17.0.2",
     "cpy-cli": "^4.1.0",
@@ -41,13 +40,14 @@
     "lodash": "^4.17.21",
     "mkdirp": "^1.0.4",
     "react": "^17.0.1",
+    "react-native": "^0.68.0",
+    "react-native-svg": "12.5.0",
     "renamer": "^2.0.1",
     "svgo": "^2.8.0",
     "typescript": "~4.1.0",
     "yargs": "^14.0.0"
   },
   "dependencies": {
-    "@griffel/react": "^1.0.0",
     "tslib": "^2.1.0"
   },
   "peerDependencies": {
@@ -82,4 +82,3 @@
     }
   }
 }
-

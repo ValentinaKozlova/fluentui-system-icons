@@ -94,14 +94,22 @@ function processFolder(srcPath, destPath, folderDepth) {
           file = file.replace("ic_", "ic_fluent_");
         }
         
+        destPath = destPath.replace('..\\test\\', '.\\intermediate\\');
         var destFile = path.join(destPath, file);
+        // var destPathDot = '.\\'+destPath;
+        
+        // if (!fs.existsSync('.\\intermediate')) {
+        //   fs.mkdirSync('.\\intermediate')
+        // }
         if (!fs.existsSync(destPath)) {
-          fs.mkdirSync(destPath)
+          fs.mkdirSync(destPath, {recursive: true})
         }
+        // fs.copyFileSync(srcFile, '.\intermediate');
         fs.copyFileSync(srcFile, destFile);
         // Generate selector if both filled/regular styles are available
-        if (SELECTOR && file.endsWith(SVG_EXTENSION)) {
+        // if (SELECTOR && file.endsWith(SVG_EXTENSION)) {
           var index = file.lastIndexOf(ICON_OUTLINE_STYLE);
+          
           if (index == -1) {
             index = file.lastIndexOf(ICON_FILLED_STYLE);
           }
@@ -112,11 +120,11 @@ function processFolder(srcPath, destPath, folderDepth) {
             } else {
               generateSelector(destPath, name)
             }
-            if (TARGET === 'react') {
+            if (TARGET === 'react' || 'react-native') {
               generateReact(destPath, file.substring(0, file.lastIndexOf(SVG_EXTENSION)), srcFile)
             }
           }
-        }
+        // }
       });
     });
   });
@@ -144,19 +152,26 @@ function generateSelector(destPath, iconName) {
 }
 
 function generateReact(destPath, iconName, srcFile) {
+  // console.log(destPath, '----------------------------------------')
+  // console.log(iconName, '----------------------------------------SRC', srcFile)
   iconName = iconName.replace("ic_fluent_", "")
   iconName = _.camelCase(iconName)
   iconName = iconName.replace(iconName.substring(0, 1), iconName.substring(0, 1).toUpperCase())
+  
   var iconContent = fs.readFileSync(srcFile, { encoding: "utf8"})
-  var selectorFile = path.join(destPath, iconName + REACT_SUFFIX + TSX_EXTENSION);
+  var selectorFile = path.join(__dirname, destPath, iconName + REACT_SUFFIX + TSX_EXTENSION);
+  selectorFile = selectorFile.replace('importer', 'packages\\react-icons')
+
+  // console.log(selectorFile, '----------------------------------------')
   var code = 
 `import * as React from 'react';
   const ${iconName + REACT_SUFFIX} = () => {
     return(
     ${iconContent}
   )};
-export default ${iconName + REACT_SUFFIX};
-`;
+ export default ${iconName + REACT_SUFFIX};
+ `;
+ console.log(code, '----------------------------------------')
   fs.writeFile(selectorFile, code, (err) => {
     if (err) throw err; 
   });
